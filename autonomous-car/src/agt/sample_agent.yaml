@@ -1,0 +1,18 @@
+--- # Devices
+- device_id: arduino1
+  className: embedded.mas.bridges.jacamo.JSONWatcherDevice
+  microcontroller: 
+      id: arduino1
+      className: Arduino4EmbeddedMas
+      serial: "COM5"
+      baudRate: 9600       
+  serialActions:
+      - actionName: front
+        actuationName: move_front
+      - actionName: left
+        actuationName: move_left
+      - actionName: right
+        actuationName: move_right
+      - actionName: halt
+        actuationName: halt_turn
+        
