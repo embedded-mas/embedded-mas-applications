@@ -1,2 +1,2 @@
 # applications
-Applications using the embedded-mas framework
+This repository records some robotic applications using the embedded-mas framework.
