@@ -5,13 +5,13 @@
 #define TRIGGER_PIN_RIGHT A0 //Sensor ultrassônico direito (vista traseira)
 #define ECHO_PIN_RIGHT A1    //Sensor ultrassônico direito (vista traseira)
 #define TRIGGER_PIN_LEFT A5  //Sensor ultrassônico esquerdo (vista traseira)
-#define ECHO_PIN_LEFT A4     //Sensor ultrassônico esquerdo (vista traseira)
+#define ECHO_PIN_LEFT A2     //Sensor ultrassônico esquerdo (vista traseira)
 #define MAX_DISTANCE 200 //Máxima distância de leitura dos sensores (dois metros)
 
 // NewPing sonar_right(TRIGGER_PIN_RIGHT, ECHO_PIN_RIGHT, MAX_DISTANCE); //Função da biblioteca NewPing.h a qual se responsabiliza pela conversão das unidades
 // NewPing sonar_left(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT, MAX_DISTANCE);    //Função da biblioteca NewPing.h a qual se responsabiliza pela conversão das unidades
 
-int IN[4] = {5, 6, 10, 11}; //Definindo pinos dos motores
+int IN[4] = {8, 9, 10, 11}; //Definindo pinos dos motores
 // #define PH1 4
 // #define PH2 5
 // #define PH3 6
@@ -37,6 +37,7 @@ void setup() {
 
   pinMode(lumi_esq, INPUT);
   pinMode(lumi_dir, INPUT);
+  pinMode(lumi_mark, INPUT);
 
   Serial.begin(9600);
 
@@ -58,11 +59,11 @@ void loop() {
     } 
     // else if(s.equals("halt_turn")){
 
-    //   com.startBelief("inspec");
-    //   com.beliefAdd(s);
-    //   com.endBelief();
+      // com.startBelief("inspec");
+      // com.beliefAdd(s);
+      // com.endBelief();
 
-    //   com.sendMessage();
+      // com.sendMessage();
 
     //   d_stop();
     // }
@@ -86,8 +87,8 @@ void front(){
 
   while(frwd == true){
 
-    lumi_esq = digitalRead(9);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
-    lumi_dir = digitalRead(8);           //Variável de medida do sensor de luminosidade direito (vista traseira)
+    lumi_esq = digitalRead(3);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
+    lumi_dir = digitalRead(4);           //Variável de medida do sensor de luminosidade direito (vista traseira)
 
     if(lumi_esq && lumi_dir){ //Caso ambos sensores estejam identificando luminosidade
       move_front();                   //O carrinho se locomove para frente
@@ -99,14 +100,14 @@ void front(){
       move_left();                       //O carrinho se move para a direita, afim de encontrar a linha
     }   
 
-    lumi_mark = digitalRead(A3);          //Variável digital de detecção de marcador (sensor de decisao)0
+    lumi_mark = digitalRead(5);          //Variável digital de detecção de marcador (sensor de decisao)0
 
     if(lumi_mark){
       while(frwd == true){ // o carrinho precisa ir para frente até o ponto de decisão
         move_front();
 
-        lumi_esq = digitalRead(9);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
-        lumi_dir = digitalRead(8);           //Variável de medida do sensor de luminosidade direito (vista traseira)
+        lumi_esq = digitalRead(3);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
+        lumi_dir = digitalRead(4);           //Variável de medida do sensor de luminosidade direito (vista traseira)
 
         if (!lumi_esq && !lumi_dir){
           frwd = false;
@@ -121,7 +122,6 @@ void front(){
   com.startBelief("comm");
   com.beliefAdd("ahead");
   com.endBelief();
-
   com.sendMessage();
 
 }
@@ -134,7 +134,7 @@ void d_left(){
   com.sendMessage();
 
   while(!lumi_dir){
-    lumi_dir = digitalRead(8);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
+    lumi_dir = digitalRead(4);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
 
     digitalWrite(IN[0], HIGH);
     digitalWrite(IN[1], LOW);
@@ -161,7 +161,7 @@ void d_right(){
 
 
   while(!lumi_esq){
-    lumi_esq = digitalRead(9);         //Variável de medida do sensor de luminosidade direito (vista traseira)
+    lumi_esq = digitalRead(3);         //Variável de medida do sensor de luminosidade direito (vista traseira)
 
     digitalWrite(IN[0], LOW);
     digitalWrite(IN[1], HIGH);

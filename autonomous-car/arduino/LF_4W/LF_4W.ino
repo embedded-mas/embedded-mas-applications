@@ -32,7 +32,7 @@ void setup() {
 
   Serial.begin(9600);
 
-  delay(3000);
+  delay(2000);
 
 }
 
@@ -57,18 +57,17 @@ void front(){
 
   bool frwd = true;
 
-  char comm = "wait";
-  com.startBelief("wait");
-  com.beliefAdd(comm);
-  com.endBelief();
+  // char comm = "wait";
+  // com.startBelief("wait");
+  // com.beliefAdd(comm);
+  // com.endBelief();
 
-  com.sendMessage();
+  // com.sendMessage();
 
   while(frwd){
 
     lumi_esq = digitalRead(A4);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
     lumi_dir = digitalRead(A2);           //Variável de medida do sensor de luminosidade direito (vista traseira)
-    lumi_mark = digitalRead(9);          //Variável digital de detecção de marcador (sensor de decisao)
 
     if(lumi_esq && lumi_dir){ //Caso ambos sensores estejam identificando luminosidade
       moveForward();                   //O carrinho se locomove para frente
@@ -78,23 +77,29 @@ void front(){
     }
     else if(lumi_esq && !lumi_dir){ //Caso o sensor da esquerda identifique luminosidade
       moveLeft();                       //O carrinho se move para a direita, afim de encontrar a linha
-    }   
+    }
+
+    lumi_mark = digitalRead(9);          //Variável digital de detecção de marcador (sensor de decisao) 
 
     if(lumi_mark){
       while(frwd){ // o carrinho precisa ir para frente até o ponto de decisão
         moveForward();
+
+        lumi_esq = digitalRead(A4);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
+        lumi_dir = digitalRead(A2);           //Variável de medida do sensor de luminosidade direito (vista traseira)
+
         if(!lumi_esq && !lumi_dir!){
           frwd = false;
         }
       }
       delay(500);
       halt();              //O agente toma uma decisao
+      break;
     }
   }
 
-  comm = "ahead";
-  com.startBelief("ahead");
-  com.beliefAdd(comm);
+  com.startBelief("comm");
+  com.beliefAdd("ahead");
   com.endBelief();
 
   com.sendMessage();
@@ -103,8 +108,8 @@ void front(){
 
  void d_left(){
 
-  com.startBelief("wait");
-  com.beliefAdd(time);
+  com.startBelief("insp");
+  com.beliefAdd("decisionL");
   com.endBelief();
 
   com.sendMessage();
@@ -119,17 +124,23 @@ void front(){
     motorBR.run(FORWARD);
     motorFR.run(FORWARD);
 
-    Serial.println("Decision Left");
+    // Serial.println("Decision Left");
   }
+
+  halt();
+
+  com.startBelief("comm");
+  com.beliefAdd("ahead");
+  com.endBelief();
+  com.sendMessage();
 
  }
 
  void d_right(){
 
-  com.startBelief("wait");
-  com.beliefAdd(time);
+  com.startBelief("insp");
+  com.beliefAdd("decisionR");
   com.endBelief();
-
   com.sendMessage();
 
   while(lumi_esq == 0){
@@ -142,8 +153,15 @@ void front(){
     motorBL.run(FORWARD);
     motorFL.run(FORWARD);
 
-    Serial.println("Decision Right");
+    // Serial.println("Decision Right");
   }
+
+  halt();
+
+  com.startBelief("comm");
+  com.beliefAdd("ahead");
+  com.endBelief();
+  com.sendMessage();
 
  }
 
