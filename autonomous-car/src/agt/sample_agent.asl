@@ -111,10 +111,13 @@ caminho_aux(Origem, Destino, Visitados, Caminho) :-
        .print("Tomando Decisao.");
        .wait(comm("ahead")); //espera até ter a crença comm("ahead")
        embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", front, []); // envia instrucao ao Arduino
-       -comm("ahead");
        !wait;
        .print("Prosseguindo.");
-       .wait(comm("ahead")).      
+       -comm("ahead");
+       .wait(comm("ahead"));
+       .print("end plan ", D).
+       // teste
+       //embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", "check", []).
 
 +!turn(D)
    <-  embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino 
@@ -123,6 +126,9 @@ caminho_aux(Origem, Destino, Visitados, Caminho) :-
        -comm("ahead");
        .print("indo para frente.");
        .wait(comm("ahead")). //espera até ter a crença comm("ahead")
+       //-comm("ahead").
+       // teste
+       //embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", "check", []).
      
 
 
