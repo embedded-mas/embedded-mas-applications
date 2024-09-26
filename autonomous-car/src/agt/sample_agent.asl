@@ -25,14 +25,32 @@ edge(3,4,right).
 edge(3,c,left).
 edge(4,5,right).
 edge(4,d,left).
-//edge(5,6,right). // comentado para testes
+edge(5,6,right).
 edge(5,e,left).
 edge(6,1,right).
 edge(6,f,left).
-//add new lines
-edge(d,7,left).
-edge(7,8,left).
-edge(8,z,left).
+edge(d,k,left).
+edge(d,7,right).
+edge(5,4,left).
+edge(5,e,right).
+edge(e,10,right).
+edge(e,8,left).
+edge(8,9,right).
+edge(8,7,left).
+edge(7,j,right).
+edge(7,d,left).
+edge(d,k,left).
+edge(k,l,left).
+edge(l,m,left).
+edge(m,a,left).
+edge(g,f,front).
+edge(f,6,left).
+edge(f,h,right).
+edge(6,5,left).
+edge(6,f,right).
+edge(h,i,left).
+edge(i,j,left).
+
 
 //uma aresta de X para Y indica um caminho de Y para X.
 counteredge(X,Y,Direction) :- edge(Y,X,direction) 
