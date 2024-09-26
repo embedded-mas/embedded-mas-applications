@@ -31,7 +31,7 @@ edge(6,1,right).
 edge(6,f,left).
 //add new lines
 edge(d,7,left).
-edge(7,8.left).
+edge(7,8,left).
 edge(8,z,left).
 
 //uma aresta de X para Y indica um caminho de Y para X.
