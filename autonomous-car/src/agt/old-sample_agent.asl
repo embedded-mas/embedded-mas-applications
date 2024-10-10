@@ -1,138 +1,59 @@
-edge(a,1,front,inicio).
-edge(b,2,front,inicio).
-edge(c,3,front,inicio).
-edge(g,f,front,inicio).
-edge(9,8,front,inicio).
-edge(10,e,front,inicio).
-//-------------
+/*edge(a,1).
+edge(b,2).
+edge(c,3).
+edge(d,4).
+edge(f,6).
+edge(1,2).
+edge(1,6).
+edge(2,3).
+edge(3,4).
+edge(4,5).
+edge(5,6).
+edge(6,1).*/
 
-edge(h,i,left,f).
+edge(a,1,front).
+edge(b,2,front).
+edge(c,3,front).
+edge(d,4,front).
+edge(e,5,front).
+edge(f,6,front).
+edge(1,2,left).
+edge(1,6,right).
+edge(2,3,right).
+edge(2,b,left).
+edge(3,4,right).
+edge(3,c,left).
+edge(4,5,right).
+edge(4,d,left).
+edge(5,6,right).
+edge(5,e,left).
+edge(6,1,right).
+edge(6,f,left).
+edge(d,k,left).
+edge(d,7,right).
+edge(5,4,left).
+edge(5,e,right).
+edge(e,10,right).
+edge(e,8,left).
+edge(8,9,right).
+edge(8,7,left).
+edge(7,j,right).
+edge(7,d,left).
+edge(d,k,left).
+edge(k,l,left).
+edge(l,m,left).
+edge(m,a,left).
+edge(g,f,front).
+edge(f,6,left).
+edge(f,h,right).
+edge(6,5,left).
+edge(6,f,right).
+edge(h,i,left).
+edge(i,j,left).
 
-edge(i,h,right,j).
-
-edge(i,j,left,h).
-
-edge(j,i,right,7).
-
-
-edge(1,2,left,a).
-edge(1,2,right,6).
-
-edge(2,1,right,b).
-edge(2,1,left,3).
-
-edge(1,6,right,a).
-edge(1,6,left,2).
-
-edge(2,3,right,1).
-edge(2,3,left,b).
-
-edge(3,2,right,c).
-edge(3,2,left,4).
-
-edge(2,b,left,1).
-edge(2,b,right,3).
-
-edge(3,4,right,2).
-edge(3,4,left,c).
-
-edge(4,3,right,d).
-edge(4,3,left,5).
-
-edge(3,c,left,2).
-edge(3,c,right,4).
-
-edge(4,5,right,3).
-edge(4,5,left,d).
-
-edge(4,d,left,3).
-edge(4,d,right,5).
-
-edge(d,4,right,k).
-edge(d,4,left,7).
-
-edge(5,6,right,4).
-edge(5,6,left,e).
-
-edge(5,e,left,4).
-edge(5,e,right,6).
-
-edge(e,5,right,8).
-edge(e,5,left,10).
-
-edge(6,1,right,5).
-edge(6,1,left,f).
-
-edge(6,f,left,5).
-edge(6,f,right,1).
-
-edge(d,k,left,4).
-edge(d,k,right,7).
-
-edge(d,7,right,4).
-edge(d,7,left,k).
-
-edge(5,4,left,6).
-edge(5,4,right,e).
-
-edge(e,10,right,5).
-edge(e,10,left,8).
-
-edge(e,8,left,5).
-edge(e,8,right,10).
-
-edge(8,e,right,7).
-edge(8,e,left,9).
-
-edge(8,9,right,e).
-edge(8,9,left,7).
-
-edge(8,7,left,e).
-edge(8,7,right,9).
-
-edge(7,8,right,d).
-edge(7,8,left,j).
-
-edge(7,j,right,8).
-edge(7,j,left,d).
-
-edge(j,7,left,i).
-
-edge(7,d,left,8).
-edge(7,d,right,j).
-
-edge(k,d,right,i).
-
-edge(k,l,left,d).
-
-edge(l,k,right,m).
-
-edge(l,m,left,k).
-
-edge(m,a,left,l).
-
-edge(a,m,right,1).
-
-edge(f,6,left,g).
-edge(f,6,right,h).
-
-edge(f,h,right,g).
-edge(f,h,left,6).
-
-edge(h,f,right,i).
-
-edge(6,5,left,1).
-edge(6,5,right,f).
-
-
-
-edge(m,l,right,a).
-//----------------
-
-//-------------------------------------------------------------------------------------------------------------------------------
 
 //uma aresta de X para Y indica um caminho de Y para X.
-counteredge(X,Y,Direction,Previous) :- edge(Y,X,direction,previous) 
+counteredge(X,Y,Direction) :- edge(Y,X,direction) 
                               & X\==Y & opposite_direction(direction,Direction).
 
 opposite_direction(front,back).
@@ -143,21 +64,22 @@ opposite_direction(right,left).
 // Cranca de que pode seguir com a execução
 comm("ahead").
 
+
 /* O agente conclui que pode chegar de Origem a Destino por um Caminho... */
-caminho(Origem, Destino, Caminho, Anterior) :-
-    caminho_aux(Origem, Destino, [Origem], Caminho, Anterior).
+caminho(Origem, Destino, Caminho) :-
+    caminho_aux(Origem, Destino, [Origem], Caminho).
 
 // Regra auxiliar para buscar um caminho usando recursão - caso base
-caminho_aux(Destino, Destino, Caminho, Caminho, Anterior).
+caminho_aux(Destino, Destino, Caminho, Caminho).
 
-caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-    
-    .findall(Proximos,edge(Origem,Proximos,_,Anterior),LProximos) & .member(Destino,LProximos) &
+caminho_aux(Origem, Destino, Visitados, Caminho) :-    
+    .findall(Proximos,edge(Origem,Proximos,_),LProximos) & .member(Destino,LProximos) &
     .concat(Visitados,[Destino],NVisitados) &
-    caminho_aux(Destino,Destino,NVisitados,Caminho,Origem).
+    caminho_aux(Destino,Destino,NVisitados,Caminho).
 
-caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
+caminho_aux(Origem, Destino, Visitados, Caminho) :-
     // Verifica se existe uma aresta de Origem para um próximo nó
-    (edge(Origem, Proximo,_,Anterior) | counteredge(Origem,Proximo,_,Anterior))
+    (edge(Origem, Proximo,_) | counteredge(Origem,Proximo,_))
 
     //obter uma lista de todos os Proximo, ver se o destino está nesta lista, pegar o "proximo"<>destino e parar de procurar
 
@@ -165,18 +87,18 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
     &  not(.member(Proximo, Visitados))
     // Adiciona o próximo nó à lista de visitados
    // & caminho_aux(Proximo, Destino, [Proximo | Visitados], Caminho).
-    & .concat(Visitados,[Proximo],NVisitados) &  caminho_aux(Proximo, Destino, NVisitados, Caminho, Origem).
+    & .concat(Visitados,[Proximo],NVisitados) &  caminho_aux(Proximo, Destino, NVisitados, Caminho).
                              
-//-------------------------------------------------------------------------------------------------------------------------------------
-!go_to(b,h). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
+
+!go_to(a,c). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
 
 
-+!go_to(Origem,Destino) :  caminho(Origem,Destino,Caminho,Anterior) 
++!go_to(Origem,Destino) :  caminho(Origem,Destino,Caminho) 
    <- .print("Vou percorrer o caminho ", Caminho);
       !percorre_caminho(Caminho);      
       .print("Cheguei ao destino").
 
-//-------------------------------------------------------------------------------------------------------------------------------------
+
 //Planos para atingir o objetivo "percorre_caminho". Estes planos fazem o agente percorrer uma lista de pontos passados como parâmetro.
 
 //Caso 1: A lista de pontos percorrer está vazia. Logo, não há caminho a percorrer.
@@ -191,9 +113,9 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
 
 //Caso 3: O agente está no meio do trajeto.
 +!percorre_caminho([H|T]) : posicao_atual(P)  //verificar a posição atual
-                            & edge(P,H,D,F) //verificar a direção a seguir de P para H
+                            & edge(P,H,D) //verificar a direção a seguir de P para H
                             //& comm("ahead")
-   <- .print("Indo de ", P, " para ", H, " (vindo de ", F, ") - direcao: ", D);
+   <- .print("Indo de ", P, " para ", H, " - direcao: ", D);
       -+posicao_atual(H); //atualiza a posição atual
       //embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino
       //!wait;
@@ -201,7 +123,8 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
       !turn(D);
       !percorre_caminho(T).
 
-//-------------------------------------------------------------------------------------------------------------------------------------
+
+
 +!turn(D) : D\==front
    <-  embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino 
        !wait;
@@ -252,4 +175,3 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
    <- .wait(200).
       //-+comm("ahead").
       
-
