@@ -1,20 +1,10 @@
-edge(a,1,front,inicio).
-edge(b,2,front,inicio).
-edge(c,3,front,inicio).
-edge(g,f,front,inicio).
-edge(9,8,front,inicio).
-edge(10,e,front,inicio).
+edge(a,1,front,null).
+edge(b,2,front,null).
+edge(c,3,front,null).
+edge(g,f,front,null).
+edge(9,8,front,null).
+edge(10,e,front,null).
 //-------------
-
-edge(h,i,left,f).
-
-edge(i,h,right,j).
-
-edge(i,j,left,h).
-
-edge(j,i,right,7).
-
-
 edge(1,2,left,a).
 edge(1,2,right,6).
 
@@ -124,12 +114,16 @@ edge(h,f,right,i).
 edge(6,5,left,1).
 edge(6,5,right,f).
 
+edge(h,i,left,f).
 
+edge(i,h,right,j).
+
+edge(i,j,left,h).
+
+edge(j,i,right,7).
 
 edge(m,l,right,a).
-//----------------
 
-//-------------------------------------------------------------------------------------------------------------------------------
 
 //uma aresta de X para Y indica um caminho de Y para X.
 counteredge(X,Y,Direction,Previous) :- edge(Y,X,direction,previous) 
@@ -143,6 +137,7 @@ opposite_direction(right,left).
 // Cranca de que pode seguir com a execução
 comm("ahead").
 
+
 /* O agente conclui que pode chegar de Origem a Destino por um Caminho... */
 caminho(Origem, Destino, Caminho, Anterior) :-
     caminho_aux(Origem, Destino, [Origem], Caminho, Anterior).
@@ -151,24 +146,19 @@ caminho(Origem, Destino, Caminho, Anterior) :-
 caminho_aux(Destino, Destino, Caminho, Caminho, Anterior).
 
 caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-    
-    .findall(Proximos,edge(Origem,Proximos,_,Anterior),LProximos) & .member(Destino,LProximos) &
-    .concat(Visitados,[Destino],NVisitados) &
-    caminho_aux(Destino,Destino,NVisitados,Caminho,Origem).
+    .findall([Proximos,Direcao], edge(Origem,Proximos,Direcao,Anterior), LProximos) &
+    .member([Destino, _], LProximos) &
+    .concat(Visitados, [[Destino, Origem]], NVisitados) &
+    caminho_aux(Destino, Destino, NVisitados, Caminho, Origem).
 
-caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
-    // Verifica se existe uma aresta de Origem para um próximo nó
-    (edge(Origem, Proximo,_,Anterior) | counteredge(Origem,Proximo,_,Anterior))
-
-    //obter uma lista de todos os Proximo, ver se o destino está nesta lista, pegar o "proximo"<>destino e parar de procurar
-
-    // Verifica se o próximo nó não foi visitado ainda para evitar ciclos
-    &  not(.member(Proximo, Visitados))
-    // Adiciona o próximo nó à lista de visitados
-   // & caminho_aux(Proximo, Destino, [Proximo | Visitados], Caminho).
-    & .concat(Visitados,[Proximo],NVisitados) &  caminho_aux(Proximo, Destino, NVisitados, Caminho, Origem).
+caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-    
+    (edge(Origem, Proximo, Direcao, Anterior) | counteredge(Origem, Proximo, Direcao, Anterior)) &
+    not(.member([Proximo, _], Visitados)) &  // Verifica se o próximo nó não foi visitado ainda para evitar ciclos
+    .concat(Visitados, [[Proximo, Origem]], NVisitados) &
+    caminho_aux(Proximo, Destino, NVisitados, Caminho, Origem).
                              
-//-------------------------------------------------------------------------------------------------------------------------------------
-!go_to(b,h). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
+
+!go_to(10,5). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
 
 
 +!go_to(Origem,Destino) :  caminho(Origem,Destino,Caminho,Anterior) 
@@ -176,32 +166,41 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
       !percorre_caminho(Caminho);      
       .print("Cheguei ao destino").
 
-//-------------------------------------------------------------------------------------------------------------------------------------
+
 //Planos para atingir o objetivo "percorre_caminho". Estes planos fazem o agente percorrer uma lista de pontos passados como parâmetro.
 
 //Caso 1: A lista de pontos percorrer está vazia. Logo, não há caminho a percorrer.
-+!percorre_caminho([]) 
++!percorre_caminho([],_) 
    <- .print("Percorri todo o caminho").
 
 //Caso 2: O agente não tem crença a respeito da sua posição atual. Logo, ele ainda não começou o trajeto.
 +!percorre_caminho([H|T]) : not posicao_atual(_)  //se o agente não tem a crença "posicao_atual", ele está no início do percurso
-   <- .print("Iniciando o caminho em ", H, ".",T);
+   <- .print("Iniciando o caminho em ", H, " (vindo de ", F, ").", T);
       +posicao_atual(H); //atualiza a posição atual
       !percorre_caminho(T).
 
-//Caso 3: O agente está no meio do trajeto.
-+!percorre_caminho([H|T]) : posicao_atual(P)  //verificar a posição atual
-                            & edge(P,H,D,F) //verificar a direção a seguir de P para H
-                            //& comm("ahead")
-   <- .print("Indo de ", P, " para ", H, " (vindo de ", F, ") - direcao: ", D);
+//Caso 3: O agente está na primeira aresta.
++!percorre_caminho([[H, F]|T]) : posicao_atual(P)
+                                 & edge(P,H,D,null) //verificar a direção a seguir de P para H
+                                    //& comm("ahead")
+   <- .print("Indo de ", P, " para ", H, " (vindo de ", null, ") - direcao: ", D);
       -+posicao_atual(H); //atualiza a posição atual
       //embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino
       //!wait;
       //.wait(comm("ahead")); //espera até ter a crença comm("ahead")
       !turn(D);
-      !percorre_caminho(T).
+      !percorre_caminho(T,P).
 
-//-------------------------------------------------------------------------------------------------------------------------------------
+//Caso 4: O agente está no meio do trajeto.
++!percorre_caminho([[H, F]|T], O) : posicao_atual(P)
+                                 & edge(P,H,D,O) //verificar a direção a seguir de P para H
+                                    //& comm("ahead")
+   <- .print("Indo de ", P, " para ", H, " (vindo de ", F, ") - direcao: ", D);
+      -+posicao_atual(H); //atualiza a posição atual
+      !turn(D);
+      !percorre_caminho(T,P).
+
+
 +!turn(D) : D\==front
    <-  embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino 
        !wait;

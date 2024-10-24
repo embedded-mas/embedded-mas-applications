@@ -1,10 +1,20 @@
-edge(a,1,front,null).
-edge(b,2,front,z).
-edge(c,3,front,z).
-edge(g,f,front,z).
-edge(9,8,front,z).
-edge(10,e,front,z).
+edge(a,1,front,inicio).
+edge(b,2,front,inicio).
+edge(c,3,front,inicio).
+edge(g,f,front,inicio).
+edge(9,8,front,inicio).
+edge(10,e,front,inicio).
 //-------------
+
+edge(h,i,left,f).
+
+edge(i,h,right,j).
+
+edge(i,j,left,h).
+
+edge(j,i,right,7).
+
+
 edge(1,2,left,a).
 edge(1,2,right,6).
 
@@ -114,16 +124,12 @@ edge(h,f,right,i).
 edge(6,5,left,1).
 edge(6,5,right,f).
 
-edge(h,i,left,f).
 
-edge(i,h,right,j).
-
-edge(i,j,left,h).
-
-edge(j,i,right,7).
 
 edge(m,l,right,a).
+//----------------
 
+//-------------------------------------------------------------------------------------------------------------------------------
 
 //uma aresta de X para Y indica um caminho de Y para X.
 counteredge(X,Y,Direction,Previous) :- edge(Y,X,direction,previous) 
@@ -136,7 +142,6 @@ opposite_direction(right,left).
 
 // Cranca de que pode seguir com a execução
 comm("ahead").
-
 
 /* O agente conclui que pode chegar de Origem a Destino por um Caminho... */
 caminho(Origem, Destino, Caminho, Anterior) :-
@@ -162,8 +167,8 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
    // & caminho_aux(Proximo, Destino, [Proximo | Visitados], Caminho).
     & .concat(Visitados,[Proximo],NVisitados) &  caminho_aux(Proximo, Destino, NVisitados, Caminho, Origem).
                              
-
-!go_to(a,5). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
+//-------------------------------------------------------------------------------------------------------------------------------------
+!go_to(b,h). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
 
 
 +!go_to(Origem,Destino) :  caminho(Origem,Destino,Caminho,Anterior) 
@@ -171,7 +176,7 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
       !percorre_caminho(Caminho);      
       .print("Cheguei ao destino").
 
-
+//-------------------------------------------------------------------------------------------------------------------------------------
 //Planos para atingir o objetivo "percorre_caminho". Estes planos fazem o agente percorrer uma lista de pontos passados como parâmetro.
 
 //Caso 1: A lista de pontos percorrer está vazia. Logo, não há caminho a percorrer.
@@ -196,8 +201,7 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
       !turn(D);
       !percorre_caminho(T).
 
-
-
+//-------------------------------------------------------------------------------------------------------------------------------------
 +!turn(D) : D\==front
    <-  embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino 
        !wait;
