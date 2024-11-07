@@ -137,18 +137,12 @@ opposite_direction(left,right).
 opposite_direction(right,left).
 
 // Cranca de que pode seguir com a execução
-//comm("ahead").
+comm("ahead").
 
-
-/* O agente conclui que pode chegar de Origem a Destino por um Caminho... */
-// caminho(Origem, Destino, Caminho, Anterior) :-
-//     caminho_aux(Origem, Destino, [Origem], Caminho, Anterior).
 
 /* O agente conclui que pode chegar de Origem a Destino por um Caminho... */
 caminho(Origem, Destino, Caminho, Anterior) :-
-   caminho_aux(Origem, Destino, [Origem], Caminho, Anterior) &
-   not (caminho_aux(Origem, Destino, [Origem], Caminho2, Anterior2) & 
-   .length(Caminho,L1) & .length(Caminho2,L2) & L2<L1).
+    caminho_aux(Origem, Destino, [Origem], Caminho, Anterior).
 
 // Regra auxiliar para buscar um caminho usando recursão - caso base
 caminho_aux(Destino, Destino, Caminho, Caminho, Anterior).
@@ -213,13 +207,13 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
    <-  embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino 
        !wait;
        //-+comm("ahead"); //Simula crença vinda do arduino
-       -comm("ahead")[device(_),source(percept)];
+       -comm("ahead");
        .print("Tomando Decisao.");
        .wait(comm("ahead")); //espera até ter a crença comm("ahead")
        embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", front, []); // envia instrucao ao Arduino
        !wait;
        .print("Prosseguindo.");
-       -comm("ahead")[device(_),source(percept)];
+       -comm("ahead");
        .wait(comm("ahead"));
        .print("end plan ", D).
        // teste
@@ -229,7 +223,7 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
    <-  embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino 
        !wait;
        //-+comm("ahead"); //Simula crença vinda do arduino
-       -comm("ahead")[device(_),source(percept)];
+       -comm("ahead");
        .print("indo para frente.");
        .wait(comm("ahead")). //espera até ter a crença comm("ahead")
        //-comm("ahead").
@@ -260,8 +254,3 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
       //-+comm("ahead").
       
 
-+comm("ahead")
-   <- .print("recebeu ahead").
-
--comm("ahead")
-   <- .print("perdeu ahead").

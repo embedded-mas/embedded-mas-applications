@@ -113,7 +113,6 @@ void front(){
           frwd = false;
         }
       }
-      delay(500);
       halt();
       break;             //O agente toma uma decisao
     }

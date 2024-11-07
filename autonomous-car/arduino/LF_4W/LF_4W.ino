@@ -92,7 +92,7 @@ void front(){
           frwd = false;
         }
       }
-      delay(500);
+      // delay(500);
       halt();              //O agente toma uma decisao
       break;
     }
@@ -101,7 +101,6 @@ void front(){
   com.startBelief("comm");
   com.beliefAdd("ahead");
   com.endBelief();
-
   com.sendMessage();
 
  }
