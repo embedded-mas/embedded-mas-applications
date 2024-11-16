@@ -132,8 +132,8 @@ void d_left(){
   com.endBelief();
   com.sendMessage();
 
-  while(!lumi_dir){
-    lumi_dir = digitalRead(4);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
+  while(!lumi_esq){
+    lumi_esq = digitalRead(3);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
 
     digitalWrite(IN[0], HIGH);
     digitalWrite(IN[1], LOW);
@@ -159,8 +159,8 @@ void d_right(){
   com.sendMessage();
 
 
-  while(!lumi_esq){
-    lumi_esq = digitalRead(3);         //Variável de medida do sensor de luminosidade direito (vista traseira)
+  while(!lumi_dir){
+    lumi_dir = digitalRead(4);         //Variável de medida do sensor de luminosidade direito (vista traseira)
 
     digitalWrite(IN[0], LOW);
     digitalWrite(IN[1], HIGH);

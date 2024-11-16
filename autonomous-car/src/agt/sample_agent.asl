@@ -166,7 +166,7 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
     caminho_aux(Proximo, Destino, NVisitados, Caminho, Origem).
                              
 
-!go_to(a,c). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
+!go_to(10,6). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
 
 
 +!go_to(Origem,Destino) :  caminho(Origem,Destino,Caminho,Anterior) 
