@@ -211,16 +211,20 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
 
 +!turn(D) : D\==front
    <-  embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino 
+       -comm("ahead",_)[source(self)];
        !wait;
+
        //-+comm("ahead"); //Simula crença vinda do arduino
-       -comm("ahead")[device(_),source(percept)];
+       //-comm("ahead")[device(_),source(percept)];
        .print("Tomando Decisao.");
-       .wait(comm("ahead")); //espera até ter a crença comm("ahead")
+       .wait(comm("ahead",V1)[source(self)]); //espera até ter a crença comm("ahead")
        embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", front, []); // envia instrucao ao Arduino
+       -comm("ahead",X)[source(self)];
        !wait;
+
        .print("Prosseguindo.");
-       -comm("ahead")[device(_),source(percept)];
-       .wait(comm("ahead"));
+       //-comm("ahead")[device(_),source(percept)];
+       .wait(comm("ahead",V2)[source(self)]);
        .print("end plan ", D).
        // teste
        //embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", "check", []).
@@ -229,9 +233,10 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
    <-  embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", D, []); // envia instrucao ao Arduino 
        !wait;
        //-+comm("ahead"); //Simula crença vinda do arduino
-       -comm("ahead")[device(_),source(percept)];
+       //-comm("ahead")[device(_),source(percept)];
+       -comm("ahead",_)[source(self)];
        .print("indo para frente.");
-       .wait(comm("ahead")). //espera até ter a crença comm("ahead")
+       .wait(comm("ahead",V)[source(self)]). //espera até ter a crença comm("ahead")
        //-comm("ahead").
        // teste
        //embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", "check", []).
@@ -260,8 +265,9 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
       //-+comm("ahead").
       
 
-+comm("ahead")
-   <- .print("recebeu ahead").
++comm("ahead",V)[device(_),source(percept)]
+   <-  +comm("ahead",V)[source(self)];
+       .print("recebeu ahead").
 
--comm("ahead")
+-comm("ahead",V)[source(self)]
    <- .print("perdeu ahead").
