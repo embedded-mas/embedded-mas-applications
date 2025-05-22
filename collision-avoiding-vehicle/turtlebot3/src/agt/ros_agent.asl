@@ -2,6 +2,9 @@
 //export TURTLEBOT3_MODEL=burger &&\
 //roslaunch turtlebot3_gazebo turtlebot3_world.launch
 
+max_actuations(100). //set a value X>0 to finish the application after X actuations
+actuations(0).
+
 obstacle_front(X) :- distance_reading(ranges(L)) &
                     .length(L,S) & 
                     .nth(0,L,X).    
@@ -22,8 +25,12 @@ obstacle_left(X) :- distance_reading(ranges(L)) &
 +!walk : obstacle_front(F) & F < 1 
    <- .print("Obstacle front") ;
       .move_robot([-0.1,0,0],[0,0,0.0]);
+      ?actuations(A);
+      -+actuations(A+1);
       .wait(50);
       .move_robot([0,0,0],[0,0,-0.2]); //turn right
+      ?actuations(A);
+      -+actuations(A+1);
       .wait(100);
       !walk.   
 
@@ -31,6 +38,8 @@ obstacle_left(X) :- distance_reading(ranges(L)) &
          (not obstacle_right(_) | obstacle_right(R) & R > L)
    <- .print("Obstacle left") ;
       .move_robot([0,0,0],[0,0,-0.2]);
+      ?actuations(A);
+      -+actuations(A+1);
       .wait(100);
       !walk.
 
@@ -38,6 +47,8 @@ obstacle_left(X) :- distance_reading(ranges(L)) &
          (not obstacle_left(_) | obstacle_left(L) & L > R)
    <- .print("Obstacle right") ;
       .move_robot([0,0,0],[0,0,0.2]);
+      ?actuations(A);
+      -+actuations(A+1);
       .wait(100);
       !walk.
 
@@ -47,6 +58,8 @@ obstacle_left(X) :- distance_reading(ranges(L)) &
 +!walk 
    <- .print("no obstacle") ;
       .move_robot([0.2,0,0],[0,0,0.0]);
+      ?actuations(A);
+      -+actuations(A+1);
       .wait(100);
       !walk.      
 
@@ -108,6 +121,11 @@ obstacle_left(X) :- distance_reading(ranges(L)) &
 +!turn.
 
 //-------------------------------------------------------------    
+
++actuations(A) : max_actuations(M) & M>-1 & A>M 
+   <- .move_robot([0,0,0],[0,0,0.0]);
+      .print("Finishing system after ", A, " actuations."); 
+      .stopMAS.
 
 { include("$jacamo/templates/common-cartago.asl") }
 { include("$jacamo/templates/common-moise.asl") }
