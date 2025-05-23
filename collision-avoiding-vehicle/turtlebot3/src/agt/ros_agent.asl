@@ -2,7 +2,7 @@
 //export TURTLEBOT3_MODEL=burger &&\
 //roslaunch turtlebot3_gazebo turtlebot3_world.launch
 
-max_actuations(100). //set a value X>0 to finish the application after X actuations
+max_actuations(1000). //set a value X>0 to finish the application after X actuations
 actuations(0).
 
 obstacle_front(X) :- distance_reading(ranges(L)) &
@@ -27,10 +27,10 @@ obstacle_left(X) :- distance_reading(ranges(L)) &
       .move_robot([-0.1,0,0],[0,0,0.0]);
       ?actuations(A);
       -+actuations(A+1);
-      .wait(50);
+      .wait(100);
       .move_robot([0,0,0],[0,0,-0.2]); //turn right
-      ?actuations(A);
-      -+actuations(A+1);
+      ?actuations(A2);
+      -+actuations(A2+1);
       .wait(100);
       !walk.   
 
