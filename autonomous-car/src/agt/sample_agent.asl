@@ -126,6 +126,9 @@ edge(j,i,right,7).
 
 edge(m,l,right,a).
 
+teammate(car4w,[car2w]).
+teammate(car2w,[car4w]).
+
 
 //uma aresta de X para Y indica um caminho de Y para X.
 counteredge(X,Y,Direction,Previous) :- edge(Y,X,direction,previous) 
@@ -168,9 +171,25 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
 
 !go_to(10,6). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
 
++hello[source(A)]  <- .print("Hello form ", A).
+
+
++!say_hello : .my_name(Me) & teammate(Me,L)
+   <- !say_hello(L).
+
++!say_hello([]).
+
++!say_hello([H|T])
+   <- .send(H,tell,hello);
+       !say_hello(T).
+
+
+
 
 +!go_to(Origem,Destino) :  caminho(Origem,Destino,Caminho,Anterior) 
-   <- .print("Vou percorrer o caminho ", Caminho);
+   <- .broadcast(tell,hello);
+      //.send(car2w,tell,hello);
+      .print("Vou percorrer o caminho ", Caminho);
       !percorre_caminho(Caminho);      
       .print("Cheguei ao destino").
 
@@ -236,10 +255,13 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
        //-comm("ahead")[device(_),source(percept)];
        -comm("ahead",_)[source(self)];
        .print("indo para frente.");
-       .wait(comm("ahead",V)[source(self)]). //espera até ter a crença comm("ahead")
-       //-comm("ahead").
+       //.wait(comm("ahead",V)[source(self)]). //espera até ter a crença comm("ahead")
+       .wait(hello);
+       .print("recebeu hello");
+       //-comm("ahead");
        // teste
        //embedded.mas.bridges.jacamo.defaultEmbeddedInternalAction("arduino1", "check", []).
+       .
      
 
 
