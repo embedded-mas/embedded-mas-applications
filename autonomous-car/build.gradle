@@ -1,3 +1,4 @@
+
 /*
    Project exemplo_graph
 
@@ -21,8 +22,9 @@ java {
 }
 
 repositories {
-    maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
-    maven { url "https://repo.gradle.org/gradle/libs-releases-local" }
+    // maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
+    maven {url "https://raw.githubusercontent.com/jacamo-lang/mvn-repo/master" }
+    maven { url "https://repo.gradle.org/gradle/libs-releases" }
     maven { url "https://raw.github.com/embedded-mas/embedded-mas-mvn-repo/master" }
 
     //maven { url "http://jacamo.sourceforge.net/maven2" }
@@ -36,11 +38,16 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jacamo:jacamo:0.10-SNAPSHOT'
+    // implementation 'org.jacamo:jacamo:0.10-SNAPSHOT'
+    implementation 'org.jacamo:jacamo:1.2.3'
     // implementation "embedded-mas:embedded-mas:0.058-SNAPSHOT"
     // implementation "embedded-mas:embedded-mas:0.05908-DEV"
-    implementation "embedded-mas:embedded-mas:0.060c-SNAPSHOT"
+    implementation "embedded-mas:embedded-mas:0.061f-SNAPSHOT"
     implementation "javard:javard:0.032-SNAPSHOT"
+
+    implementation files('libs/jacamo-rest-0.7.jar')
+    implementation("javax.ws.rs:javax.ws.rs-api:2.0")
+    implementation("org.glassfish.jersey.core:jersey-server:2.29.1")
 }
 
 sourceSets {
@@ -66,6 +73,30 @@ task run (type: JavaExec, dependsOn: 'classes') {
     }
     mainClass = 'jacamo.infra.JaCaMoLauncher'
     args 'exemplo_graph.jcm'
+    // jvmArgs '-Xss15m'
+    classpath sourceSets.main.runtimeClasspath
+}
+
+task run4w (type: JavaExec, dependsOn: 'classes') {
+    group       ' JaCaMo'
+    description 'runs the JaCaMo application'
+    doFirst {
+        mkdir 'log'
+    }
+    mainClass = 'jacamo.infra.JaCaMoLauncher'
+    args 'car4w.jcm'
+    // jvmArgs '-Xss15m'
+    classpath sourceSets.main.runtimeClasspath
+}
+
+task run2w (type: JavaExec, dependsOn: 'classes') {
+    group       ' JaCaMo'
+    description 'runs the JaCaMo application'
+    doFirst {
+        mkdir 'log'
+    }
+    mainClass = 'jacamo.infra.JaCaMoLauncher'
+    args 'car2w.jcm'
     // jvmArgs '-Xss15m'
     classpath sourceSets.main.runtimeClasspath
 }
@@ -103,37 +134,37 @@ publishing {
 }
 
 
-task uberJar(type: Jar, dependsOn: 'classes') {
-    group      ' JaCaMo'
-    description 'creates a single runnable jar file with all dependencies'
-    duplicatesStrategy 'exclude'
+//task uberJar(type: Jar, dependsOn: 'classes') {
+//    group      ' JaCaMo'
+//    description 'creates a single runnable jar file with all dependencies'
+//    duplicatesStrategy 'exclude'/
 
-    manifest {
-        attributes 'Main-Class': 'jacamo.infra.JaCaMoLauncher'
-    }
-    archiveBaseName = 'jacamo-exemplo_graph' // the name must start with jacamo so that jacamo...jar is found in the classpath
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    from (project.projectDir.absolutePath) {
-        include '**/*.asl'
-        include '**/*.xml'
-        include '**/*.sai'
-        include '**/*.ptl'
-        include '**/*.jcm'
-        include '*.properties'
-    }
-    from (project.buildDir.absolutePath + '/jcm') {
-        include '**/*'
-    }
-    with jar
+//    manifest {
+//        attributes 'Main-Class': 'jacamo.infra.JaCaMoLauncher'
+//    }
+//    archiveBaseName = 'jacamo-exemplo_graph' // the name must start with jacamo so that jacamo...jar is found in the classpath
+//    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+//    from (project.projectDir.absolutePath) {
+//        include '**/*.asl'
+//        include '**/*.xml'
+//        include '**/*.sai'
+//       include '**/*.ptl'
+//        include '**/*.jcm'
+//        include '*.properties'
+//    }
+//    from (project.buildDir.absolutePath + '/jcm') {
+//        include '**/*'
+//    }
+//    with jar
 
-    doFirst {
-        copy {
-            from 'exemplo_graph.jcm'
-            rename 'exemplo_graph.jcm','default.jcm'
-            into project.buildDir.absolutePath + '/jcm'
-        }
-    }
-}
+//    doFirst {
+//        copy {
+//            from 'exemplo_graph.jcm'
+//            rename 'exemplo_graph.jcm','default.jcm'
+//            into project.buildDir.absolutePath + '/jcm'
+//        }
+//    }
+//}
 
 
 task testJaCaMo {
