@@ -126,6 +126,16 @@ edge(j,i,right,7).
 
 edge(m,l,right,a).
 
+//----------- square edges ------
+edge(w,z,front,null).
+edge(y,x,front,null).
+edge(x,w,front,null).
+edge(z,y,front,null).
+edge(w,z,left,x).
+edge(z,y,left,w).
+edge(y,x,left,z).
+edge(x,w,left,y).
+
 teammate(car4w,[car2w]).
 teammate(car2w,[car4w]).
 
@@ -169,7 +179,7 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
     caminho_aux(Proximo, Destino, NVisitados, Caminho, Origem).
                              
 
-!go_to(10,6). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
+!go_to(w,x). //Objetivo go_to(X,Y): o agente deseja ir do ponto X ao Y.
 
 +hello[source(A)]  <- .print("Hello form ", A).
 
@@ -191,7 +201,8 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
       //.send(car2w,tell,hello);
       .print("Vou percorrer o caminho ", Caminho);
       !percorre_caminho(Caminho);      
-      .print("Cheguei ao destino").
+      .print("Cheguei ao destino");
+      //!go_to(w,x).
 
 
 //Planos para atingir o objetivo "percorre_caminho". Estes planos fazem o agente percorrer uma lista de pontos passados como parâmetro.
@@ -255,8 +266,8 @@ caminho_aux(Origem, Destino, Visitados, Caminho, Anterior) :-
        //-comm("ahead")[device(_),source(percept)];
        -comm("ahead",_)[source(self)];
        .print("indo para frente.");
-       //.wait(comm("ahead",V)[source(self)]). //espera até ter a crença comm("ahead")
-       .wait(hello);
+       .wait(comm("ahead",V)[source(self)]); //espera até ter a crença comm("ahead")
+       //.wait(hello);
        .print("recebeu hello");
        //-comm("ahead");
        // teste
