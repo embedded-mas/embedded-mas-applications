@@ -18,22 +18,9 @@
       #           Different interfaces can be implemented for different types of microcontrollers.
       #className: DefaultRos4EmbeddedMas  
       className: DefaultRos4Bdi
-      #perceptionTopics: List of topics whose values are converted into perceptions.
-      #                  Each topic requires to define its name and its type.   
+  #perceptionTopics: List of topics whose values are converted into perceptions.
+  #                  Each topic requires to define its name and its type.   
   perceptionTopics:         
-      - topicName: /turtle1/energy
-        topicType: std_msgs/Int32
-        beliefName: batteryLevel 
-      - topicName: /turtle1/alarm
-        topicType: std_msgs/String
-        beliefName: security_level
-      - topicName: turtle1/pose
-        topicType: turtlesim/Pose
-        beliefName: position
-        ignoreValues: 
-          - theta
-          - linear_velocity
-          - angular_velocity
       - topicName: scan
         topicType: sensor_msgs/LaserScan
         beliefName: distance_reading
@@ -61,3 +48,9 @@
               - x
               - y
               - z 
+
+- perception_rules:
+  - obstacle_front(X) :- distance_reading(ranges(L)) & .length(L,S) & .nth(0,L,X).    
+  - obstacle_right(X) :- distance_reading(ranges(L)) & .length(L,S) & .nth(40,L,X).    
+  - obstacle_left(X) :- distance_reading(ranges(L)) & .length(L,S) & .nth(300,L,X).    
+           

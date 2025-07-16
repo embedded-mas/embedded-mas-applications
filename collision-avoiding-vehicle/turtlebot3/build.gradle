@@ -9,7 +9,7 @@ group   'org.jacamo'
 
 //java {
 //    toolchain {
-//        languageVersion = JavaLanguageVersion.of(17)
+//        languageVersion = JavaLanguageVersion.of(21)
 //    }
 //}
 
@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     implementation 'org.jacamo:jacamo:1.2.3'
-    implementation "embedded-mas:embedded-mas:0.060-SNAPSHOT" 
+    implementation "embedded-mas:embedded-mas:0.061-SNAPSHOT" 
     implementation 'org.yaml:snakeyaml:2.0'
 }
 
