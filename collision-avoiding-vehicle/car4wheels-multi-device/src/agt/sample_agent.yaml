@@ -5,14 +5,53 @@
   microcontroller: 
       id: arduino1
       className: Arduino4EmbeddedMas
-      serial: "/dev/ttyACM0"
+      serial: "/dev/ttyUSB0"
       baudRate: 9600       
-  serialActions:
-      - actionName: Front
-        actuationName: infront
-      - actionName: Left
-        actuationName: toleft
-      - actionName: Right
-        actuationName: toright
-      - actionName: Back
-        actuationName: toback
+  # serialActions:
+  #     - actionName: Front
+  #       actuationName: infront
+  #     - actionName: Left
+  #       actuationName: toleft
+  #     - actionName: Right
+  #       actuationName: toright
+  #     - actionName: Back
+  #       actuationName: toback
+
+  actuators: 
+    - actuator_id: motor_front_left
+      actuations: 
+        - actuation_id: forward
+        - actuation_id: backward
+        - actuation_id: turn_off
+    - actuator_id: motor_front_right
+      actuations: 
+        - actuation_id: forward
+        - actuation_id: backward
+        - actuation_id: turn_off
+    - actuator_id: motor_rear_left
+      actuations: 
+        - actuation_id: forward
+        - actuation_id: backward
+        - actuation_id: turn_off
+    - actuator_id: motor_rear_right
+      actuations: 
+        - actuation_id: forward
+        - actuation_id: backward
+        - actuation_id: turn_off
+      
+- actions:
+  - front:
+    - [arduino1.motor_front_left.forward, arduino1.motor_front_right.forward, arduino1.motor_rear_left.forward, arduino1.motor_rear_right.forward]
+    #- [arduino1.motor_front_left.forward,arduino1.motor_front_right.forward]
+  - back:
+    - [arduino1.motor_front_left.backward, arduino1.motor_front_right.backward, arduino1.motor_rear_left.backward, arduino1.motor_rear_right.backward]    
+  - right:
+    # - [arduino1.motor_front_left.forward, arduino1.motor_front_right.backward, arduino1.motor_rear_left.forward, arduino1.motor_rear_right.backward]  
+    - [arduino1.motor_rear_left.forward,arduino1.motor_front_left.forward, arduino1.motor_front_right.backward, arduino1.motor_rear_right.backward]  
+  - left:
+    - [arduino1.motor_front_left.backward, arduino1.motor_front_right.forward, arduino1.motor_rear_left.backward, arduino1.motor_rear_right.forward]  
+- perception_rules:
+  - obstacle_front(L) :- dist_left(L) & dist_right(R) & L<=0.2 & R <=0.2 & L < R.
+  - obstacle_front(R) :- dist_left(L) & dist_right(R) & L<=0.2 & R <=0.2 & L >= R.
+  - obstacle_right(R) :- dist_left(L) & dist_right(R) & L>0.2 & R <=0.2.
+  - obstacle_left(L) :- dist_left(L) & dist_right(R) & L<=0.2 & R>0.2.
