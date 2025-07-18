@@ -1,19 +1,19 @@
 
 //export TURTLEBOT3_MODEL=burger && roslaunch turtlebot3_gazebo turtlebot3_world.launch
 
-obstacle_front(X) :- distance_reading(ranges(L)) &
-                    .length(L,S) & 
-                    .nth(0,L,X).    
+// obstacle_front(X) :- distance_reading(ranges(L)) &
+//                     .length(L,S) & 
+//                     .nth(0,L,X).    
 
 
-obstacle_right(X) :- distance_reading(ranges(L)) &
-                    .length(L,S) & 
-                    .nth(40,L,X).    
+// obstacle_right(X) :- distance_reading(ranges(L)) &
+//                     .length(L,S) & 
+//                     .nth(40,L,X).    
 
 
-obstacle_left(X) :- distance_reading(ranges(L)) &
-                    .length(L,S) & 
-                    .nth(300,L,X).    
+// obstacle_left(X) :- distance_reading(ranges(L)) &
+//                     .length(L,S) & 
+//                     .nth(300,L,X).    
 
 
 !walk.

@@ -111,3 +111,10 @@
             x: 0.0
             y: 0.0
             z: 0.2
+
+
+- perception_rules:
+  - obstacle_front(X) :- distance_reading(ranges(L)) & .length(L,S) &  .nth(0,L,X).    
+  - obstacle_right(X) :- distance_reading(ranges(L)) & .length(L,S) &  .nth(40,L,X).    
+  - obstacle_left(X) :- distance_reading(ranges(L)) & .length(L,S) &  .nth(300,L,X).    
+
