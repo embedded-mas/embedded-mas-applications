@@ -1,11 +1,19 @@
 
-## Behavioral Summary
+# System overview
 The robot follows a path represented by a ground line, which may have decision points (e.g. forks). Upon reaching a decision point, the robot is decides what to do (turn left, turn right, moving forward).
 
 
 <img src="images/path.png" alt="Diagrama do robô" width="500"/>
 
 Small signals at right of the line mark a decision point ahead. Notice that decision point detected and line following control is implemented in the firmware, without requiring any decision from the robot. 
+
+
+## Agent description
+The agent can move around the map by performing the following internal actions
+
+While running, the agent may have the following perceptions:
+- `path_lost`, when there is not line to follow and a decision is required (e.g. turn left or right);
+- `path_detected` when a line is detected.
 
 
 ## Firmware description
