@@ -2,7 +2,10 @@
 ## Behavioral Summary
 The robot follows a path represented by a ground line, which may have decision points (e.g. forks). Upon reaching a decision point, the robot is decides what to do (turn left, turn right, moving forward).
 
-The line following control is implemented in the firmware, without requiring any decision from the robot. 
+
+<img src="images/path.png" alt="Diagrama do robô" width="500"/>
+
+Small signals at right of the line mark a decision point ahead. Notice that decision point detected and line following control is implemented in the firmware, without requiring any decision from the robot. 
 
 
 ## Firmware description
