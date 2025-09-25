@@ -51,7 +51,7 @@ The `loop()` function listens to **serial commands** from an external controller
 - When the marker sensor (`lumi_mark`) is activated:
   - The robot continues forward until both sensors lose line detection.  
   - The robot halts and exits the loop, signaling that it has reached a decision point.  
-- Sends belief `comm(ahead)` after halting.  
+- Sends belief `path_decision_required` after halting.  
 
 ### `d_left()`
 - Sends belief `insp(t2)`.  
