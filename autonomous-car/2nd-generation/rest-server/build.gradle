@@ -1,0 +1,60 @@
+/*
+   example: Rest for agent communication
+
+*/
+
+defaultTasks 'run'
+
+apply plugin: 'java'
+
+version '1.0'
+group   'org.jacamo'
+
+
+repositories {
+    mavenCentral()
+
+    maven { url "https://raw.githubusercontent.com/jacamo-lang/mvn-repo/master" }
+    maven { url "https://repo.gradle.org/gradle/libs-releases" }
+
+}
+
+dependencies {
+    implementation ('org.jacamo:jacamo:1.2.3')
+    implementation files('/mnt/1C4C766F4C764414/maiquel/git/jacamo_rest_maiquel_dev/jacamo-rest/build/libs/jacamo-rest-0.7.jar')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/env'
+            srcDir 'src/agt'
+            srcDir 'src/org'
+            srcDir 'src/java'
+        }
+        resources {
+            srcDir 'src/resources'
+        }
+    }
+}
+
+task run (type: JavaExec, dependsOn: 'classes') {
+	group ' JaCaMo'
+    description 'runs bob'
+    mainClass = 'jacamo.infra.JaCaMoLauncher'
+    args 'rest-server.jcm'
+    classpath sourceSets.main.runtimeClasspath
+}
+
+clean {
+    delete 'bin'
+    delete 'build'
+}
+
+
+task buildJCMDeps (type: JavaExec, dependsOn: 'classes') {
+    mainClass = 'jacamo.infra.RunJaCaMoProject'
+    args = ['h1.jcm', '--deps']
+    classpath sourceSets.main.runtimeClasspath
+}
+

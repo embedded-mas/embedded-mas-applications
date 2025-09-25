@@ -1,0 +1,3 @@
+!start.
+
++!start <- .print("Hello.").

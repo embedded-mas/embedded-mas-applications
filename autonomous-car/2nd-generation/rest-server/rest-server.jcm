@@ -1,0 +1,7 @@
+mas rest_server {
+
+    agent server 
+
+    platform: jacamo.rest.JCMRest("--rest-port 8080 --host-address 10.0.0.4")
+
+}
