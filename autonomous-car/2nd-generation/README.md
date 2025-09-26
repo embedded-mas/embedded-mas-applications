@@ -9,7 +9,10 @@ Small signals at right of the line mark a decision point ahead. Notice that deci
 
 
 ## Agent description
-The agent can move around the map by performing the following internal actions
+The agent can move around the map by performing the following internal actions:
+- `.front` → to move forward
+- `.left` → to turn left
+- .`right` → to turn right.
 
 While running, the agent may have the following perceptions:
 - `path_lost`, when there is not line to follow and a decision is required (e.g. turn left or right);
