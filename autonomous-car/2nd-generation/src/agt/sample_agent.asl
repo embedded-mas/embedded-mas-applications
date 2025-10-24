@@ -10,6 +10,6 @@
    
 /*   
 
-   Use the internal actions .front, .left, right to move in the desired direction.
+   Use the internal actions .front, .left, .right to move in the desired direction.
 
 */
