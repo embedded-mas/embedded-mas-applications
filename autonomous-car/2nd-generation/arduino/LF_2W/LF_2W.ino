@@ -58,10 +58,6 @@ void front(){
 
   bool frwd = true;
 
-  com.startBelief("front");
-  com.beliefAdd("in");
-  com.endBelief();
-  com.sendMessage();
 
   while(frwd == true){
 
@@ -97,6 +93,7 @@ void front(){
   }
 
   com.startBelief("fork_detected");
+  com.beliefAdd("true");
   com.endBelief();
   com.sendMessage();
 
@@ -117,6 +114,7 @@ void d_left(){
   halt();
 
   com.startBelief("line_detected");
+  com.beliefAdd("true");
   com.endBelief();
   com.sendMessage();
 
@@ -138,7 +136,7 @@ void d_right(){
   halt();
 
   com.startBelief("line_detected");
-  //com.beliefAdd("ahead");
+  com.beliefAdd("true");
   com.endBelief();
   com.sendMessage();
 
