@@ -8,14 +8,7 @@
 #define ECHO_PIN_LEFT A2     //Sensor ultrassônico esquerdo (vista traseira)
 #define MAX_DISTANCE 200 //Máxima distância de leitura dos sensores (dois metros)
 
-// NewPing sonar_right(TRIGGER_PIN_RIGHT, ECHO_PIN_RIGHT, MAX_DISTANCE); //Função da biblioteca NewPing.h a qual se responsabiliza pela conversão das unidades
-// NewPing sonar_left(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT, MAX_DISTANCE);    //Função da biblioteca NewPing.h a qual se responsabiliza pela conversão das unidades
-
 int IN[4] = {8, 9, 10, 11}; //Definindo pinos dos motores
-// #define PH1 4
-// #define PH2 5
-// #define PH3 6
-// #define PH4 7
 
 int lumi_esq = 0;           //Necesidade de ser uma variável global
 int lumi_dir = 0;           //Necesidade de ser uma variável global
@@ -57,21 +50,6 @@ void loop() {
       d_right();
 
     } 
-    // else if(s.equals("halt_turn")){
-
-      // com.startBelief("inspec");
-      // com.beliefAdd(s);
-      // com.endBelief();
-
-      // com.sendMessage();
-
-    //   d_stop();
-    // }
-    // com.startBelief("inspec");
-    // com.beliefAdd(s);
-    // com.endBelief();
-
-    // com.sendMessage();
   }
 
 }
@@ -118,19 +96,13 @@ void front(){
     }
   }
 
-  com.startBelief("comm");
-  com.beliefAdd("ahead");
+  com.startBelief("fork_detected");
   com.endBelief();
   com.sendMessage();
 
 }
 
 void d_left(){
-
-  com.startBelief("insp");
-  com.beliefAdd("t2");
-  com.endBelief();
-  com.sendMessage();
 
   while(!lumi_esq){
     lumi_esq = digitalRead(3);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
@@ -144,19 +116,13 @@ void d_left(){
 
   halt();
 
-  com.startBelief("comm");
-  com.beliefAdd("ahead");
+  com.startBelief("line_detected");
   com.endBelief();
   com.sendMessage();
 
  }
 
 void d_right(){
-
-  com.startBelief("insp");
-  com.beliefAdd("t3");
-  com.endBelief();
-  com.sendMessage();
 
 
   while(!lumi_dir){
@@ -171,36 +137,13 @@ void d_right(){
 
   halt();
 
-  com.startBelief("comm");
-  com.beliefAdd("ahead");
+  com.startBelief("line_detected");
+  //com.beliefAdd("ahead");
   com.endBelief();
   com.sendMessage();
 
  }
 
-//  void d_stop(){
-  
-//   bool frwd = true, flag = true;
-
-//   while(flag){
-//     digitalWrite(IN[0], LOW);
-//     digitalWrite(IN[1], HIGH);
-//     digitalWrite(IN[2], HIGH);
-//     digitalWrite(IN[3], LOW);
-
-//     lumi_esq = digitalRead(9);           //Variável de medida do sensor de luminosidade esquerdo (vista traseira)
-
-//     if(!lumi_esq){flag=false;}
-//   }
-
-//   halt();
-
-//   com.startBelief("comm");
-//   com.beliefAdd("turn");
-//   com.endBelief();
-//   com.sendMessage();
-
-//  }
 
 //ABAIXO CONSTAM APENAS AS FUNÇÕES DE SENTIDO DE GIRO E COMBINAÇÃO ENTRE OS MOTORES
 
@@ -210,14 +153,6 @@ void move_front(){
   digitalWrite(IN[1], HIGH);
   digitalWrite(IN[2], LOW);
   digitalWrite(IN[3], HIGH);
-
-  // digitalWrite(PH1, HIGH);
-  // digitalWrite(PH2, LOW); // move pneu direita para frente
-  // digitalWrite(PH2, HIGH);
-  // digitalWrite(PH4, LOW);
-
-  // Serial.println("forward");
-
 }
 
 void halt(){
@@ -225,7 +160,6 @@ void halt(){
   digitalWrite(IN[1], LOW);
   digitalWrite(IN[2], LOW);
   digitalWrite(IN[3], LOW);
-  // Serial.println("halt");
 }
 
 void move_back(){
@@ -240,7 +174,6 @@ void move_right(){
   digitalWrite(IN[1], HIGH);
   digitalWrite(IN[2], LOW);
   digitalWrite(IN[3], LOW);
-  // Serial.println("right");
 }
 
 void move_left(){
@@ -248,5 +181,4 @@ void move_left(){
   digitalWrite(IN[1], LOW);
   digitalWrite(IN[2], LOW);
   digitalWrite(IN[3], HIGH);
-  // Serial.println("left");
 }
