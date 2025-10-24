@@ -18,7 +18,7 @@ Its control logic is executed on an Arduino platform, integrating motor control,
 - **Ultrasonic sensors:** Declared (via `NewPing`), but not integrated into the active control loop in this version of the code.  
 
 - **Communication module:**  
-  Uses a `Communication` object (`com`) to build and send beliefs (structured messages), intended for integration with a higher-level reasoning system.  
+  Uses a `Communication` object (`com`) to build and send perceptions (structured messages), intended for integration with a higher-level reasoning system.  
 
 ---
 
@@ -43,7 +43,7 @@ The `loop()` function listens to **serial commands** from an external controller
 ## Behaviors
 
 ### `front()`
-- Sends belief `front(in)` through the communication module.  
+- Sends  `front(in)` through the communication module.  
 - Implements continuous forward motion with **line-following correction**:
   - Both sensors detect line → advance (`move_front()`).  
   - Only right sensor detects line → correct left (`move_right()`).  
@@ -51,17 +51,17 @@ The `loop()` function listens to **serial commands** from an external controller
 - When the marker sensor (`lumi_mark`) is activated:
   - The robot continues forward until both sensors lose line detection.  
   - The robot halts and exits the loop, signaling that it has reached a decision point.  
-- Sends belief `path_decision_required` after halting.  
+- Sends perception `fork_detected` after halting.  
 
 ### `d_left()`
-- Sends belief `insp(t2)`.  
+- Sends perception `insp(t2)`.  
 - Executes a left turn until the left sensor detects line again.  
-- Stops and sends belief `line_detected`.  
+- Stops and sends perception `line_detected`.  
 
 ### `d_right()`
-- Sends belief `insp(t3)`.  
+- Sends perception `insp(t3)`.  
 - Executes a right turn until the right sensor detects line again.  
-- Stops and sends belief `line_detected`.  
+- Stops and sends perception `line_detected`.  
 
 ---
 
@@ -75,7 +75,7 @@ The `loop()` function listens to **serial commands** from an external controller
 ---
 
 ## Communication and Integration
-The robot uses the `Communication` object to exchange **beliefs** representing its state and actions with an external system.  
+The robot uses the `Communication` object to exchange **perceptions** representing its state and actions with an external system.  
 This suggests integration with a **BDI-style agent framework**, where high-level decision-making (e.g., route selection at intersections) is delegated to an external deliberative agent, while the Arduino executes low-level reactive control.  
 
 ---
