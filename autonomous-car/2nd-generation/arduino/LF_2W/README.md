@@ -54,12 +54,10 @@ The `loop()` function listens to **serial commands** from an external controller
 - Sends perception `fork_detected` after halting.  
 
 ### `d_left()`
-- Sends perception `insp(t2)`.  
 - Executes a left turn until the left sensor detects line again.  
 - Stops and sends perception `line_detected`.  
 
 ### `d_right()`
-- Sends perception `insp(t3)`.  
 - Executes a right turn until the right sensor detects line again.  
 - Stops and sends perception `line_detected`.  
 
