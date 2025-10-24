@@ -28,6 +28,15 @@ The firmware expects some of the following commands (so-called *actuations*) fro
 - `move_left` → to turn left
 - `move_right` → to turn right.
 
+These *actuations* are produced by the actions of the agent described above, as summarized below:
+| Agent action | Firmware actuation |
+|---------------|--------------------|
+| `.front`      | `move_front`       |
+| `.left`       | `move_left`        |
+| `.right`      | `move_right`       |
+
+
+
 These behaviours are explained below:
 - *moving forward*: the vehicle keeps in continuous forward motion with line-following correction. After detecting a decision mark, the vehicle continues forward until loosing line detection, when it stops. The firmware sends the perception `path_decision_required` to the agent. 
 - *turning left*: the vehicle turns left until the line is detected. The firmware sends the perception `line_detected` to the agent.
