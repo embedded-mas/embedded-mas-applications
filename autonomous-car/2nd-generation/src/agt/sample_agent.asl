@@ -1,11 +1,11 @@
 
 //Plan for handling fork detection. The agent must decide to turn either left or right.
-+fork_detected
++fork_detected(true)
    <- .print("Fork detected. Path decision required").	
    
    
 //Plan for handling line detection. The agent can move forward.
-+line_detected
++line_detected(true)
    <- .print("Line detected").	   
    
 /*   
