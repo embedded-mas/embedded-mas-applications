@@ -15,8 +15,8 @@ The agent can move around the map by performing the following internal actions:
 - .`right` → to turn right.
 
 While running, the agent may have the following perceptions:
-- `path_lost`, when there is not line to follow and a decision is required (e.g. turn left or right);
-- `path_detected` when a line is detected.
+- `fork_detected`, when there is not line to follow and a decision is required (e.g. turn left or right);
+- `path_detected` when a line is detected and the agent can move forward.
 
 
 ## Firmware description
