@@ -1,0 +1,68 @@
+devices:
+  - device_id: main_device
+    className: embedded.mas.bridges.jacamo.JSONWatcherDevice
+    microcontroller: 
+      id: main_arduino
+      className: Arduino4EmbeddedMas
+      serial: "/dev/ttyUSB0"
+      baudRate: 9600       
+  
+    actuators: 
+      - actuator_id: motor_left
+        actuations: 
+          - actuation_id: forward
+          - actuation_id: backward
+          - actuation_id: turn_off
+      - actuator_id: motor_right
+        actuations: 
+          - actuation_id: forward
+          - actuation_id: backward
+          - actuation_id: turn_off
+      
+actions:
+  - name: front
+    parameters: [time]
+    sequence: 
+      - 
+        - actuation: main_device.motor_left.forward
+        - actuation: main_device.motor_right.forward
+      - 
+        - actuation: wait
+          param_mapping: 
+            millis: time 
+  - name: back
+    parameters: [time]
+    sequence: 
+      - 
+        - actuation: main_device.motor_left.backward
+        - actuation: main_device.motor_right.backward
+      - 
+        - actuation: wait
+          param_mapping: 
+            millis: time 
+  - name: right
+    parameters: [time]
+    sequence: 
+      - 
+        - actuation: main_device.motor_left.forward
+        - actuation: main_device.motor_right.backward
+      - 
+        - actuation: wait
+          param_mapping: 
+            millis: time 
+  - name: left
+    parameters: [time]
+    sequence: 
+      - 
+        - actuation: main_device.motor_left.backward
+        - actuation: main_device.motor_right.forward
+      - 
+        - actuation: wait
+          param_mapping: 
+            millis: time 
+    
+perception_rules:
+  - obstacle_front(L) :- dist_left(L)[device(main_device)] & dist_right(R)[device(main_device)] & L<=0.2 & R <=0.2 & L < R.
+  - obstacle_front(R) :- dist_left(L)[device(main_device)]  & dist_right(R)[device(main_device)]  & L<=0.2 & R <=0.2 & L >= R.
+  - obstacle_right(R) :- dist_left(L)[device(main_device)]  & dist_right(R)[device(main_device)]  & L>0.2 & R <=0.2.
+  - obstacle_left(L) :- dist_left(L)[device(main_device)]  & dist_right(R)[device(main_device)]  & L<=0.2 & R>0.2.
