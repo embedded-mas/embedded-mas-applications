@@ -1,4 +1,5 @@
---- # Devices
+# The agent's body has from 1 to many devices, which are physical portions of this body. 
+# Each device has an identifier "device_id"
 - device_id: arduino1
   className: embedded.mas.bridges.jacamo.JSONWatcherDevice
   microcontroller: 
