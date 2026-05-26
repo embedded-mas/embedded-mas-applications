@@ -6,7 +6,7 @@ The application contains an agent embodied in a simulated [Turtlebot3](https://e
 
 ## 2.1 Agent's perceptions
 
-Distances from obstacles are measured by a LIDAR sensor and recorded in the topic *scan(header, angle_min, angle_max, angle_increment, time_increment, range_min, range_max, ranges(D), intensities)* s.t. (i) *ranges(D)* defines a list $D$ of 360 positions, corresponding to the distance of obstacles in the angles $0^\circ$ to $360^\circ$; and (ii) the remainder parameters are not relevant. This value of the topic *scan* is translated to the belief `distance(ranges(L))`, where `L` is the list of 360 positions. The mapping between the topic and the corresponding belief is specified in the key `perceptionTopics` of the  [yaml configuraton file](src/agt/robot1.yaml). To simplify the agent specification, the agent has three inference rules to conclude the following facts:  
+Distances from obstacles are measured by a LIDAR sensor and recorded in the topic *scan(header, angle_min, angle_max, angle_increment, time_increment, range_min, range_max, ranges(D), intensities)* s.t. (i) *ranges(D)* defines a list $D$ of 360 positions, corresponding to the distance of obstacles in the angles $0^\circ$ to $360^\circ$; and (ii) the remainder parameters are not relevant. This value of the topic *scan* is translated to the belief `distance_reading(ranges(L))`, where `L` is the list of 360 positions. The mapping between the topic and the corresponding belief is specified in the key `perceptionTopics` of the  [yaml configuraton file](src/agt/robot1.yaml). To simplify the agent specification, the agent has three inference rules to conclude the following facts:  
 - `obstacle_front(X)`, when there is some obstacle ahead at distance `X`, which is the case when the first distance recorded in the list `D` of the belief distance(ranges(D))  *scan* is `X`.
 - `obstacle_left(X)`, when there is some obstacle at left at distance `X`, which is the case when the $40^{th}$ distance recorded in the list `D` of the belief distance(ranges(D))  *scan* is `X`.
 - `obstacle_right(X)`, when there is some obstacle at right at distance `D`, which is the case when the $300^{th}$ distance recorded in the list `D` of the belief distance(ranges(D))  *scan* is `X`.
@@ -33,10 +33,8 @@ Running the example requires two main steps:
 
 It is possible to choose between a container-based setup (recommended - only Docker is required) and a local setup (ROS core and related tools are required).
 
-#### 4.1.1 Container-based setup: 
+#### 4.1.1 Container-based setup - Recommended: 
 Requirements: [Docker](https://www.docker.com/)
-
-Use the following command to launch the ROS infrastructure:
 
 In a shell, type ```./launch_ros.sh``` to launch the ROS infrastructure. (preceed with ```sudo``` if needed).
 

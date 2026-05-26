@@ -9,11 +9,14 @@ Small signals at right of the line mark a decision point ahead. Notice that deci
 
 
 ## Agent description
-The agent can move around the map by performing the following internal actions
+The agent can move around the map by performing the following internal actions:
+- `.front` → to move forward
+- `.left` → to turn left
+- .`right` → to turn right.
 
 While running, the agent may have the following perceptions:
-- `path_lost`, when there is not line to follow and a decision is required (e.g. turn left or right);
-- `path_detected` when a line is detected.
+- `fork_detected`, when there is not line to follow and a decision is required (e.g. turn left or right);
+- `path_detected` when a line is detected and the agent can move forward.
 
 
 ## Firmware description
@@ -24,6 +27,15 @@ The firmware expects some of the following commands (so-called *actuations*) fro
 - `move_front` → to move forward
 - `move_left` → to turn left
 - `move_right` → to turn right.
+
+These *actuations* are produced by the actions of the agent described above, as summarized below:
+| Agent action | Firmware actuation |
+|---------------|--------------------|
+| `.front`      | `move_front`       |
+| `.left`       | `move_left`        |
+| `.right`      | `move_right`       |
+
+
 
 These behaviours are explained below:
 - *moving forward*: the vehicle keeps in continuous forward motion with line-following correction. After detecting a decision mark, the vehicle continues forward until loosing line detection, when it stops. The firmware sends the perception `path_decision_required` to the agent. 
