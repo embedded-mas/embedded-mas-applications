@@ -15,20 +15,11 @@ apply from: '.jcm-deps.gradle' // this file contains dependencies declared in th
 version '1.0'
 group   'org.jacamo'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
 
 repositories {
-    // maven { url "https://raw.github.com/jacamo-lang/mvn-repo/master" }
     maven {url "https://raw.githubusercontent.com/jacamo-lang/mvn-repo/master" }
     maven { url "https://repo.gradle.org/gradle/libs-releases" }
     maven { url "https://raw.github.com/embedded-mas/embedded-mas-mvn-repo/master" }
-
-    //maven { url "http://jacamo.sourceforge.net/maven2" }
-    //maven { url "https://jade.tilab.com/maven/" }
 
     flatDir { dirs 'lib' }
 
@@ -38,19 +29,9 @@ repositories {
 }
 
 dependencies {
-    // implementation 'org.jacamo:jacamo:0.10-SNAPSHOT'
     implementation 'org.jacamo:jacamo:1.2.3'
-    // implementation "embedded-mas:embedded-mas:0.058-SNAPSHOT"
-    // implementation "embedded-mas:embedded-mas:0.05908-DEV"
-    //implementation "embedded-mas:embedded-mas:0.061-SNAPSHOT"
-    implementation files ("/mnt/1C4C766F4C764414/maiquel/git/nrjavaserial/embedded-mas/build/libs/embedded-mas-0.061-SNAPSHOT.jar")
+    implementation "embedded-mas:embedded-mas:0.061-SNAPSHOT"
     implementation "javard:javard:0.036-SNAPSHOT"
-
-    implementation files('libs/jacamo-rest-0.7.jar')
-    implementation("javax.ws.rs:javax.ws.rs-api:2.0")
-    implementation("org.glassfish.jersey.core:jersey-server:2.29.1")
-    
-    implementation("org.yaml:snakeyaml:1.30")
 }
 
 sourceSets {
@@ -68,7 +49,7 @@ sourceSets {
     }
 }
 
-task run (type: JavaExec, dependsOn: 'classes') {
+task run (type: JavaExec, dependsOn: ['compileGeneratedInternalActions','classes']) {
     group       ' JaCaMo'
     description 'runs the JaCaMo application'
     doFirst {
@@ -80,7 +61,7 @@ task run (type: JavaExec, dependsOn: 'classes') {
     classpath sourceSets.main.runtimeClasspath
 }
 
-task run4w (type: JavaExec, dependsOn: 'classes') {
+task run4w (type: JavaExec, dependsOn: ['compileGeneratedInternalActions','classes']) {
     group       ' JaCaMo'
     description 'runs the JaCaMo application'
     doFirst {
@@ -92,7 +73,7 @@ task run4w (type: JavaExec, dependsOn: 'classes') {
     classpath sourceSets.main.runtimeClasspath
 }
 
-task run2w (type: JavaExec, dependsOn: 'classes') {
+task run2w (type: JavaExec, dependsOn: ['compileGeneratedInternalActions','classes']) {
     group       ' JaCaMo'
     description 'runs the JaCaMo application'
     doFirst {
@@ -103,6 +84,28 @@ task run2w (type: JavaExec, dependsOn: 'classes') {
     // jvmArgs '-Xss15m'
     classpath sourceSets.main.runtimeClasspath
 }
+
+
+// Generate internal actions corresponding to actions specified in the yaml files
+task generateInternalActions(type: JavaExec) {
+    group = 'Application'
+    description = 'Generate internal actions corresponding to actions specidied in the yaml files'
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'embedded.mas.bridges.jacamo.InternalActionGenerator'
+    outputs.dir 'src/java/jason/stdlib'
+}
+
+
+// Compile internal actions
+task compileGeneratedInternalActions(type: JavaCompile, dependsOn: ['generateInternalActions']) {
+    // Specifies the source files to compile after the generation task has run
+    source = fileTree("src/java/jason/stdlib/") {
+        include '**/*.java' // Include Java files from the generated sources
+    }
+    classpath = sourceSets.main.compileClasspath    
+    destinationDir = destinationDir = file("$buildDir/classes/java/main") // Target directory for compilation
+}
+
 
 task buildJCMDeps (type: JavaExec, dependsOn: 'classes') {
     mainClass = 'jacamo.infra.RunJaCaMoProject'
