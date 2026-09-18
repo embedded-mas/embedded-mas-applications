@@ -30,8 +30,8 @@ repositories {
 
 dependencies {
     implementation 'org.jacamo:jacamo:1.2.3'
-    implementation "embedded-mas:embedded-mas:0.061-SNAPSHOT"
-    implementation "javard:javard:0.036-SNAPSHOT"
+    implementation "embedded-mas:embedded-mas:0.061-JDK17-SNAPSHOT"
+    //implementation "javard:javard:0.036-SNAPSHOT"
 }
 
 sourceSets {

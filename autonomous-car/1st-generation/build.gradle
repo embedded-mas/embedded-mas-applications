@@ -43,7 +43,7 @@ dependencies {
     // implementation "embedded-mas:embedded-mas:0.058-SNAPSHOT"
     // implementation "embedded-mas:embedded-mas:0.05908-DEV"
     implementation "embedded-mas:embedded-mas:0.061f-SNAPSHOT"
-    implementation "javard:javard:0.032-SNAPSHOT"
+    implementation "javard:javard:0.035-NRJ"
 
     implementation files('libs/jacamo-rest-0.7.jar')
     implementation("javax.ws.rs:javax.ws.rs-api:2.0")
