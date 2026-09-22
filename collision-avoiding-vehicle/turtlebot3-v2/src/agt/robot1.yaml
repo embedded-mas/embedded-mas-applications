@@ -19,6 +19,19 @@
   #perceptionTopics: List of topics whose values are converted into perceptions.
   #                  Each topic requires to define its name and its type.   
   perceptionTopics:         
+      - topicName: scan
+        topicType: sensor_msgs/LaserScan
+        beliefName: distance_reading
+        ignoreValues: 
+          - header 
+          - angle_min
+          - angle_max
+          - angle_increment
+          - time_increment
+          - scan_time
+          - range_min
+          - range_max
+          - intensities  
       - topicName: /odom
         topicType: nav_msgs/Odometry
         beliefName: odometry

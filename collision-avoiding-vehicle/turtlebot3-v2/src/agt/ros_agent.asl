@@ -92,7 +92,43 @@ atan2_approx(A,B,Yaw) :-
 
     
 
-!go_to(5,8).
+//*** regras para determinar a direção de rotação do robô    
+
+normalized_angle(CurrentAngle,TargetAngle,N) :-
+    (TargetAngle - CurrentAngle)>3.141592653589793 & N=(TargetAngle - CurrentAngle) - 6.283185307179586.
+
+normalized_angle(CurrentAngle,TargetAngle,N) :-
+    (TargetAngle - CurrentAngle)<   -3.141592653589793 & N=(TargetAngle - CurrentAngle) + 6.283185307179586.   
+
+normalized_angle(CurrentAngle,TargetAngle,N) :- 
+    (TargetAngle - CurrentAngle)>=  -3.141592653589793 & 
+    (TargetAngle - CurrentAngle)<=   3.141592653589793 & 
+    N = TargetAngle - CurrentAngle.    
+
+// The desired orientation is reached by rotating counter-clockwise.
+rotation_direction_from_error(Error, left) :-
+    Error > 0.
+
+    
+// The desired orientation is reached by rotating clockwise.
+rotation_direction_from_error(Error, right) :-
+    Error < 0.    
+
+// The robot is already at the desired orientation.
+rotation_direction_from_error(Error, none) :-
+    Error = 0.    
+
+
+
+rotation_direction(CurrentAngle,TargetAngle,Direction) :-
+    normalized_angle(CurrentAngle,TargetAngle,E)  &       
+    rotation_direction_from_error(E,Direction).
+
+!go_to(1,-0.5).
+
+// +!go_to(X,Y) : (obstacle_front(D) | obstacle_left(D) | obstacle_right(D)) & D < 0.2
+//    <- !deviate_obstacle;
+//       !go_to(X,Y).
 
 +!go_to(X,Y) : position(MyX,MyY)
    <- .print("I am at (", MyX, ",", MyY, ") and I want to go to (", X, ",", Y, ").");
@@ -112,11 +148,22 @@ atan2_approx(A,B,Yaw) :-
 
 +!align(X,Y) : position(MyX,MyY) & robot_angle(MyA) &  
                .angle(MyX, MyY, X, Y,A) & ((A-MyA)<(-0.1)|(A-MyA)>0.1) &
-   <- .print("Angle: ", A, "   My angle: ", MyA);
-      .move_robot([0,0,0],[0,0,0.2]); //turn right
+               rotation_direction(MyA,A,Direction) & Direction==right
+   <- .print("Angle: ", A, "   My angle: ", MyA, ". Turning right.");
+      .move_robot([0,0,0],[0,0,-0.2]); //turn right
       .wait(500);
       !align(X,Y);
       .
+
+
++!align(X,Y) : position(MyX,MyY) & robot_angle(MyA) &  
+               .angle(MyX, MyY, X, Y,A) & ((A-MyA)<(-0.1)|(A-MyA)>0.1) &
+               rotation_direction(MyA,A,Direction) & Direction==left
+   <- .print("Angle: ", A, "   My angle: ", MyA, ". Turning left.");
+      .move_robot([0,0,0],[0,0,0.2]); //turn left
+      .wait(500);
+      !align(X,Y);
+      .      
 
 +!align(X,Y) 
    <- .print("I am aligned.");
@@ -144,46 +191,40 @@ atan2_approx(A,B,Yaw) :-
 
 
 
-// +!walk : obstacle_front(F) & F < 1 
-//    <- .print("Obstacle front") ;
-//       .move_robot([-0.1,0,0],[0,0,0.0]);
-//       ?actuations(A);
-//       -+actuations(A+1);
-//       .wait(100);
-//       .move_robot([0,0,0],[0,0,-0.2]); //turn right
-//       ?actuations(A2);
-//       -+actuations(A2+1);
-//       .wait(75);
-//       !walk.   
++!deviate_obstacle : obstacle_front(F) & F < 0.8
+   <- .print("Obstacle front") ;
+      .move_robot([-0.1,0,0],[0,0,0.0]);
+      ?actuations(A);
+      -+actuations(A+1);
+      .wait(100);
+      .move_robot([0,0,0],[0,0,-0.2]); //turn right
+      ?actuations(A2);
+      -+actuations(A2+1);
+      .wait(100);
+      !deviate_obstacle.   
 
-// +!walk : obstacle_left(L) & L < 0.2 &
-//          (not obstacle_right(_) | obstacle_right(R) & R > L)
-//    <- .print("Obstacle left") ;
-//       .move_robot([0,0,0],[0,0,-0.2]);
-//       ?actuations(A);
-//       -+actuations(A+1);
-//       .wait(100);
-//       !walk.
++!deviate_obstacle : obstacle_left(L) & L < 0.8 &
+         (not obstacle_right(_) | obstacle_right(R) & R > L)
+   <- .print("Obstacle left") ;
+      .move_robot([0,0,0],[0,0,-0.2]);
+      ?actuations(A);
+      -+actuations(A+1);
+      .wait(150);
+      !deviate_obstacle.
 
-// +!walk : obstacle_right(R) & R < 0.2 &
-//          (not obstacle_left(_) | obstacle_left(L) & L > R)
-//    <- .print("Obstacle right") ;
-//       .move_robot([0,0,0],[0,0,0.2]);
-//       ?actuations(A);
-//       -+actuations(A+1);
-//       .wait(100);
-//       !walk.
++!deviate_obstacle : obstacle_right(R) & R < 0.8 &
+         (not obstacle_left(_) | obstacle_left(L) & L > R)
+   <- .print("Obstacle right") ;
+      .move_robot([0,0,0],[0,0,0.2]);
+      ?actuations(A);
+      -+actuations(A+1);
+      .wait(150);
+      !deviate_obstacle.
 
 
    
 
-// +!walk 
-//    <- .print("no obstacle") ;
-//       .move_robot([0.2,0,0],[0,0,0.0]);
-//       ?actuations(A);
-//       -+actuations(A+1);
-//       .wait(100);
-//       !walk.      
++!deviate_obstacle.
 
 
 // /*      
