@@ -124,11 +124,19 @@ rotation_direction(CurrentAngle,TargetAngle,Direction) :-
     normalized_angle(CurrentAngle,TargetAngle,E)  &       
     rotation_direction_from_error(E,Direction).
 
-!go_to(1,-0.5).
+!go_to(1,-2).
 
-// +!go_to(X,Y) : (obstacle_front(D) | obstacle_left(D) | obstacle_right(D)) & D < 0.2
-//    <- !deviate_obstacle;
-//       !go_to(X,Y).
+
++!go_to(X,Y) : position(MyX,MyY) &
+                    X-MyX <= 0.1 & X-MyX >= -0.1 &
+                    Y-MyY <= 0.1 & Y-MyY >= -0.1
+    <- .print("fim");
+       .move_robot([0,0,0],[0,0,0]).
+
++!go_to(X,Y) : (obstacle_front(D) | obstacle_left(D) | obstacle_right(D)) & D < 0.2
+   <- !deviate_obstacle;
+      !go_to(X,Y).
+
 
 +!go_to(X,Y) : position(MyX,MyY)
    <- .print("I am at (", MyX, ",", MyY, ") and I want to go to (", X, ",", Y, ").");
@@ -210,6 +218,7 @@ rotation_direction(CurrentAngle,TargetAngle,Direction) :-
       ?actuations(A);
       -+actuations(A+1);
       .wait(150);
+      .move_robot([-0.1,0,0],[0,0,0.0]); .wait(100); //andar um pouco para tras
       !deviate_obstacle.
 
 +!deviate_obstacle : obstacle_right(R) & R < 0.8 &
@@ -219,6 +228,7 @@ rotation_direction(CurrentAngle,TargetAngle,Direction) :-
       ?actuations(A);
       -+actuations(A+1);
       .wait(150);
+      .move_robot([-0.1,0,0],[0,0,0.0]); .wait(100); //andar um pouco para tras
       !deviate_obstacle.
 
 
